@@ -2,43 +2,99 @@
 {% extends "base.html" %}
 
 {% block content %}
-	<br>
 
-	<center>
-	<form action="/submit" id="textform" method="post">
-	    <textarea name="content" rows="4" cols="50" placeholder="Just write whatever you want to..."></textarea>
-	    <br>
-		<input type="text" name="author" placeholder="Your name">
-		<input type="number" name="response_time_score" placeholder="Response Time Score">
-	    <input type="submit" value="Post">
-	</form>
-	</center>
+	<a href="{{node_address}}/mine" class="btn btn-primary" target="_blank">
+		Request to mine
+	</a>
+	<a href="/" class="btn btn-primary">
+		Resync
+	</a>
 
-	<br>
+	<div class="row mt-4">
 
-	<a href="{{node_address}}/mine" target="_blank"><button>Request to mine</button></a>
-	<a href="/"><button>Resync</button></a>
+		{% for project in projects %}
 
-	<div style="margin: 20px;">
+		<div class="col-12 col-md-4">
+			<div class="card">
+				<div class="card-body">
+					<div class="post_box">
+						<div class="post_box-header">
+						   <div class="post_box-options">
+							<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{project.name}}">
+								<i class="fa fa-pencil" aria-hidden="true"></i>
+							</button>
+							
+							<!-- Modal -->
+							<div class="modal fade" id="{{project.name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">{{project.name}}</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									</div>
+									<form action="/submit" id="textform" method="post">
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-12 mt-2">
+												<label for="" class="text-uppercase text-muted">Fallas</label>
+												<input type="number" min="0" class="form-control" name="failures">
+											</div>
+											<div class="col-12 mt-2">
+												<label for="" class="text-uppercase text-muted">Tiempo de respuestas</label>
+												<input type="number" min="0" class="form-control" name="response_time">
+											</div>
+											<div class="col-12 mt-2">
+												<label for="" class="text-uppercase text-muted">Vista</label>
+												<input type="number" min="0" max="10" class="form-control" name="view">
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="submit" class="btn btn-primary" value="Post">GUARDAR</button>
+									</div>
+									</form>
+								</div>
+								</div>
+							</div>
+							</div>
+						   <div style="background: rgb(0, 97, 146) none repeat scroll 0% 0%; box-shadow: rgb(0, 97, 146) 0px 0px 0px 2px;" class="post_box-avatar">{{ project.name[0] }}</div>
+						   <div class="name-header">{{project.name}}</div>
+						   <div class="post_box-subtitle">
+							   <i class="fa fa-user" aria-hidden="true"></i>
+								<b>{{project.author}}</b>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<label for="" class="text-uppercase text-muted">Número de fallas</label>
+								<input type="text" class="form-control" readonly>
+							</div>
+							<div class="col-12">
+								<label for="" class="text-uppercase text-muted">Tiempo de respuesta</label>
+								<input type="text" class="form-control" readonly>
+							</div>
+							<div class="col-12">
+								<label for="" class="text-uppercase text-muted">Vista</label>
+								<input type="text" class="form-control" readonly>
+							</div>
+							<div class="col-12 mt-4 pt-2">
+								<div class="card border border-success">
+									<div class="card-body">
+										<h3 class="text-center">90%</h3>
+									</div>
+								</div>
+							</div>
+						</div>
+					 </div>
+				</div>
+			</div>
+		</div>
 
-    {% for post in posts %}
-    <div class="post_box">
-	   <div class="post_box-header">
-	      <div class="post_box-options"><button class="option-btn">Reply</button></div>
-	      <div style="background: rgb(0, 97, 146) none repeat scroll 0% 0%; box-shadow: rgb(0, 97, 146) 0px 0px 0px 2px;" class="post_box-avatar">{{post.author[0]}}</div>
-	      <div class="name-header">{{post.author}}</div>
-	      <div class="post_box-subtitle"> Posted at <i>{{readable_time(post.timestamp)}}</i></div>
-	   </div>
-	   <div>
-	      <div class="post_box-body">
-	         <p>{{post.content}}</p>
-		  </div>
-		  <div class="post_box-body">
-			<p>{{post.response_time_score}}</p>
-		 </div>
-	   </div>
+		{% endfor %}
+
 	</div>
-	{% endfor %}
 
 	<style>
 		.post_box {
