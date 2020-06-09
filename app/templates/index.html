@@ -7,6 +7,7 @@
 		Request to mine
 	</a>
 	<a href="/" class="btn btn-primary">
+		<i class="fa fa-refresh" aria-hidden="true"></i>
 		Resync
 	</a>
 
@@ -37,17 +38,19 @@
 									<form action="/submit" id="textform" method="post">
 									<div class="modal-body">
 										<div class="row">
+											<input type="hidden" name="project_name" value="{{project.name}}">
+											<input type="hidden" name="user" value="{{g.user.username}}">
 											<div class="col-12 mt-2">
 												<label for="" class="text-uppercase text-muted">Fallas</label>
-												<input type="number" min="0" class="form-control" name="failures">
+												<input required type="number" min="0" class="form-control" name="failures">
 											</div>
 											<div class="col-12 mt-2">
 												<label for="" class="text-uppercase text-muted">Tiempo de respuestas</label>
-												<input type="number" min="0" class="form-control" name="response_time">
+												<input required type="number" min="0" class="form-control" name="response_time">
 											</div>
 											<div class="col-12 mt-2">
 												<label for="" class="text-uppercase text-muted">Vista</label>
-												<input type="number" min="0" max="10" class="form-control" name="view">
+												<input required type="number" min="0" max="10" class="form-control" name="view">
 											</div>
 										</div>
 									</div>
@@ -69,20 +72,20 @@
 						<div class="row">
 							<div class="col-12">
 								<label for="" class="text-uppercase text-muted">Número de fallas</label>
-								<input type="text" class="form-control" readonly>
+								<input type="text" class="form-control" value="{{project.failures_rate_average}}" readonly value="">
 							</div>
 							<div class="col-12">
 								<label for="" class="text-uppercase text-muted">Tiempo de respuesta</label>
-								<input type="text" class="form-control" readonly>
+								<input type="text" class="form-control" value="{{project.response_time_rate_average}}" readonly>
 							</div>
 							<div class="col-12">
 								<label for="" class="text-uppercase text-muted">Vista</label>
-								<input type="text" class="form-control" readonly>
+								<input type="text" class="form-control" value="{{project.view_rate_average}}" readonly>
 							</div>
 							<div class="col-12 mt-4 pt-2">
-								<div class="card border border-success">
+								<div class="card border {{ 'border-success' if project.its_viable else 'border-danger' }}">
 									<div class="card-body">
-										<h3 class="text-center">90%</h3>
+										<h3 class="text-center">{{project.viability_grade}}%</h3>
 									</div>
 								</div>
 							</div>
