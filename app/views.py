@@ -107,20 +107,6 @@ def before_request():
     if 'user_id' in session:
         user = [x for x in users if x.id == session['user_id']][0]
         g.user = user
-@app.route('/')
-def index():
-
-    if( g.user == None ):
-        return redirect('/')
-
-    for project in projects:
-        project.updateRates()
-
-    return render_template('index.html',
-                           title='Califica los proyectos :D',
-                           projects=projects,
-                           node_address=CONNECTED_NODE_ADDRESS,
-                           readable_time=timestamp_to_string)
 
 @app.route('/')
 def index():
