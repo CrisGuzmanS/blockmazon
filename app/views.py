@@ -88,9 +88,15 @@ posts = []
 #projects = ["Uno", "Dos", "Tres"]
 
 projects = [
-    Project("Uno", "Erik"),
-    Project("Dos", "Brenda"),
-    Project("Tres", "Bryan")
+    Project("SIAL", "Erik"),
+    Project("SILISA", "Brenda"),
+    Project("SIPRAC", "Bryan"),
+    Project("SIPRACV2", "Cristian"),
+    Project("SITT", "Armando"),
+    Project("UCCURSOS", "Tanya"),
+    Project("CONTRATACIONES", "Oso"),
+    Project("MIR", "Marco"),
+    Project("SESA", "Pepe"),
 ]
 
 users = []
