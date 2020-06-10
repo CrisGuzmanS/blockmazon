@@ -36,7 +36,10 @@ class Project:
 
     def updateRates(self):
 
-        get_chain_address = "{}/chain".format(CONNECTED_NODE_ADDRESS)
+        response = requests.get(str("http://127.0.0.1:8000/random_node"))
+        address = (json.loads(response.content))['address']
+
+        get_chain_address = "{}/chain".format(address)
         response = requests.get(get_chain_address)
         
         if response.status_code == 200:
@@ -79,7 +82,7 @@ class Project:
 
 # The node with which our application interacts, there can be multiple
 # such nodes as well.
-CONNECTED_NODE_ADDRESS = "http://127.0.0.1:8000"
+
 
 posts = []
 #projects = ["Uno", "Dos", "Tres"]
@@ -109,15 +112,18 @@ def before_request():
 def index():
 
     if( g.user == None ):
-        return redirect('/')
+        return redirect('/login')
 
     for project in projects:
         project.updateRates()
 
+    response = requests.get(str("http://127.0.0.1:8000/random_node"))
+    address = (json.loads(response.content))['address']
+
     return render_template('index.html',
                            title='Califica los proyectos :D',
                            projects=projects,
-                           node_address=CONNECTED_NODE_ADDRESS,
+                           node_address=address,
                            readable_time=timestamp_to_string)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -164,11 +170,16 @@ def submit_textarea():
         'user': user
     }
 
+    response = requests.get(str("http://127.0.0.1:8000/random_node"))
+    address = (json.loads(response.content))['address']
 
     # Submit a transaction
-    new_tx_address = "{}/new_transaction".format(CONNECTED_NODE_ADDRESS)
+    tx = "{}/new_transaction".format(address)
 
-    requests.post(new_tx_address,
+
+    
+
+    requests.post(tx,
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 

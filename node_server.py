@@ -205,8 +205,14 @@ def register_new_peers():
     # Add the node to the peer list
     peers.add(node_address)
 
-    # Return the consensus blockchain to the newly registered node
-    # so that he can sync
+    #try:
+    #    response = requests.post(str('http://127.0.0.1:8000/add_new_node'),
+    #                json={'address':node_address},
+    #                headers={'Content-type': 'application/json'})
+    #    return response.content
+    #except Exception as e:
+    #    return str(e)
+                
     return get_chain()
 
 
@@ -235,11 +241,18 @@ def register_with_existing_node():
         chain_dump = response.json()['chain']
         blockchain = create_chain_from_dump(chain_dump)
         peers.update(response.json()['peers'])
+        peers.add(node_address)
+        peers.remove(request.url_root)
         return "Registration successful", 200
     else:
         # if something goes wrong, pass it on to the API response
         return response.content, response.status_code
 
+@app.route('/peers', methods=['GET'])
+def get_peers():
+    return json.dumps({
+        "peers": list(peers)
+    })
 
 def create_chain_from_dump(chain_dump):
     generated_blockchain = Blockchain()
@@ -297,7 +310,7 @@ def consensus():
     current_len = len(blockchain.chain)
 
     for node in peers:
-        response = requests.get('{}chain'.format(node))
+        response = requests.get('{}/chain'.format(node))
         length = response.json()['length']
         chain = response.json()['chain']
         if length > current_len and blockchain.check_chain_validity(chain):
