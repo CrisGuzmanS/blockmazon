@@ -116,27 +116,17 @@ def login():
         user = [x for x in users if x.username == username][0]
         if user and user.password == password:
             session['user_id'] = user.id
-            return redirect(url_for('profile'))
+            return redirect(url_for('index'))
 
         return redirect(url_for('login'))
 
     return render_template('login.html')
 
-@app.route('/profile')
-def profile():
-
-    if( g.user == None ):
-        return redirect('/')
-
-    for project in projects:
-        project.updateRates()
-
-    return render_template('index.html',
-                           title='Califica los proyectos :D',
-                           projects=projects,
-                           node_address=CONNECTED_NODE_ADDRESS,
-                           readable_time=timestamp_to_string)
-
+#@app.route('/profile')
+#def profile():
+#    if not g.user:
+#        return redirect(url_for('login'))
+  #  return render_template('profile.html')
 
 @app.route('/submit', methods=['POST'])
 def submit_textarea():
